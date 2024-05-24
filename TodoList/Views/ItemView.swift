@@ -27,8 +27,7 @@ struct ItemView: View {
                     .onTapGesture {
                         currentItem.done.toggle()
                         viewModel.update(todo: currentItem)
-                    }
-                
+                }
             }
         )
     }
