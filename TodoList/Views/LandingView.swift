@@ -27,12 +27,25 @@ struct LandingView: View {
             VStack {
                 
                 if viewModel.todos.isEmpty {
-                    // Show the prompt to add a new to-do item
-                    ContentUnavailableView(
-                        "No to-do items",
-                        systemImage: "pencil.tip.crop.circle.badge.plus",
-                        description: Text("Add a reminder to get started")
-                    )
+                    
+                    if viewModel.fetchingTodos {
+                        
+                        Spacer()
+                        
+                        ProgressView()
+                        
+                        Spacer()
+                        
+                    } else {
+
+                        ContentUnavailableView(
+                            "No to-do items",
+                            systemImage: "pencil.tip.crop.circle.badge.plus",
+                            description: Text("Add a reminder to get started")
+                        )
+
+                    }
+                    
                 } else {
                     
                     // Show the list of items
