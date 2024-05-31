@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Storage
 
 @Observable
 class TodoListViewModel {
@@ -51,16 +52,20 @@ class TodoListViewModel {
         
     }
     
-    func createToDo(withTitle title: String) {
+    func createToDo(withTitle title: String, andImage providedImage: TodoItemImage?) {
         
         // Create a unit of asynchronous work to add the to-do item
         Task {
-            
+            // Upload an image.
+            // If one was not provided to this function, then this
+            // function call will return a nil value.
+            let imageURL = try await uploadImage(providedImage)
             // Create the new to-do item instance
             // NOTE: The id will be nil for now
             let todo = TodoItem(
                 title: title,
                 done: false
+                imageURL: imageURL
             )
             
             // Write it to the database
@@ -86,6 +91,31 @@ class TodoListViewModel {
                 debugPrint(error)
             }
         }
+    }
+    
+    // We mark the function as "private" meaning it can only be invoked from inside
+    // the view model itself (it will not be accessible from the view layer)
+    private func uploadImage(_ image: TodoItemImage?) async throws -> String? {
+        
+        // Only continue past this point if an image was provided.
+        // If an image was provided, obtain the raw image data.
+        guard let imageData = image?.data else {
+            return nil
+        }
+        
+        // Generate a unique file path for the provided image
+        let filePath = "\(UUID().uuidString).jpeg"
+        
+        // Attempt to upload the raw image data to the bucket at Supabase
+        try await supabase.storage
+            .from("todos_images")
+            .upload(
+                path: filePath,
+                file: imageData,
+                options: FileOptions(contentType: "image/jpeg")
+            )
+        
+        return filePath
     }
     
     func delete(_ todo: TodoItem) {
