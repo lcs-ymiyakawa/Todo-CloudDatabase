@@ -51,17 +51,47 @@ struct LandingView: View {
                     // Show the list of items
                     List($viewModel.todos) { $todo in
                         
-                        ItemView(currentItem: $todo)
-                            // Delete item
-                            .swipeActions {
-                                Button(
-                                    "Delete",
-                                    role: .destructive,
-                                    action: {
-                                        viewModel.delete(todo)
+                        // Is there an image attached to the to-do item?
+                        if todo.imageURL == nil {
+                            
+                            // If no, just show the text of the to-do item
+                            ItemView(currentItem: $todo)
+                                // Delete item
+                                .swipeActions {
+                                    Button(
+                                        "Delete",
+                                        role: .destructive,
+                                        action: {
+                                            viewModel.delete(todo)
+                                        }
+                                    )
+                                }
+                            
+                        } else {
+                            
+                            // If yes, show a navigation
+                            // link that leads to the detail view
+                            NavigationLink(destination: {
+                                
+                                ItemDetailView(currentItem: $todo)
+                                
+                            }, label: {
+                                
+                                ItemView(currentItem: $todo)
+                                    // Delete item
+                                    .swipeActions {
+                                        Button(
+                                            "Delete",
+                                            role: .destructive,
+                                            action: {
+                                                viewModel.delete(todo)
+                                            }
+                                        )
                                     }
-                                )
-                            }
+
+                            })
+                            
+                        }
                         
                     }
                     
