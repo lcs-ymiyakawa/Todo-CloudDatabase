@@ -11,6 +11,16 @@ struct TodoItem: Identifiable, Codable {
     var id: Int?
     var title: String
     var done:  Bool
+    var imageURL: String?
+
+    // When decoding and encoding from JSON, translate snake_case
+    // column names into camelCase
+    enum CodingKeys: String, CodingKey {
+        case id
+        case title
+        case done
+        case imageURL = "image_url"
+    }
 }
 
 let firstItem = TodoItem(title: "Study for Chemisty quiz", done: false)
