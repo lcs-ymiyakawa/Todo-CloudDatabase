@@ -101,7 +101,7 @@ struct LandingView: View {
             // Show the sheet to add a new item
             .sheet(isPresented: $presentingNewItemSheet) {
                 NewItemView(showSheet: $presentingNewItemSheet)
-                    .presentationDetents([.medium, .fraction(0.25)])
+                    .presentationDetents([.medium, .fraction(0.15)])
             }
             // Add a tool bar to the top of the interface
             // NOTE: For a toolbar to appear, it must be

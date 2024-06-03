@@ -64,7 +64,7 @@ class TodoListViewModel {
             // NOTE: The id will be nil for now
             let todo = TodoItem(
                 title: title,
-                done: false
+                done: false,
                 imageURL: imageURL
             )
             
